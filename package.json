@@ -1,0 +1,26 @@
+{
+  "name": "stryker-git-checker",
+  "version": "0.1.0",
+  "description": "Git Checker for Stryker Mutator Javascript testing framework",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "repository": "git@github.com:lbtoma/stryker-git-checker.git",
+  "engines": {
+    "node": ">=12"
+  },
+  "author": "Lucas Barioni Toma <lbtoma@gmail.com>",
+  "license": "Apache-2.0",
+  "private": false,
+  "scripts": {
+    "build": "concurrently yarn:build:*",
+    "build:spack": "spack",
+    "build:types": "tsc src/index.ts --emitDeclarationOnly --declaration --skipLibCheck --declarationDir dist"
+  },
+  "dependencies": {
+    "@stryker-mutator/api": "^5.3.0"
+  },
+  "devDependencies": {
+    "jest": "^27.0.6",
+    "swc": "^1.0.11"
+  }
+}

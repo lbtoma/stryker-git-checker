@@ -1,0 +1,15 @@
+# Logs
+/**/yarn-debug.log*
+/**/yarn-error.log*
+
+# Coverage directory
+/**/coverage
+
+# Build files
+/**/dist
+
+# Dependencies
+/**/node_modules/
+
+# Yarn Integrity file
+/**/.yarn-integrity
