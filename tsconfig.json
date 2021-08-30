@@ -14,15 +14,13 @@
     "importHelpers": true,
     "noUnusedLocals": true,
     "noImplicitReturns": true,
-    "rootDir": "src",
     "outDir": "dist",
-    "types": [
-      "node"
-    ],
-    "lib": [
-      "es2019"
-    ],
-    "baseUrl": "src",
-    "paths": { "@/*": ["src/*"] }
+    "types": ["node", "jest"],
+    "lib": ["es2019"],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@tests/*": ["tests/*"]
+    }
   }
 }
