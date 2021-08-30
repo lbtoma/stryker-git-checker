@@ -7,9 +7,17 @@
 
 # Build files
 /**/dist
+/**/tsconfig.tsbuildinfo
 
 # Dependencies
 /**/node_modules/
 
 # Yarn Integrity file
 /**/.yarn-integrity
+
+# Stryker
+/**/.stryker-tmp
+/**/reports
+
+# Local evaluation
+demo
