@@ -7,7 +7,7 @@
 
 # Build files
 /**/dist
-/**/tsconfig.tsbuildinfo
+/**/*.tsbuildinfo
 
 # Dependencies
 /**/node_modules/
