@@ -71,7 +71,9 @@ export class GitChecker implements Checker {
       exec(GIT_DIFF_COMMAND, (error, stdout, stderr) => {
         if (error) {
           this.logger.error(stderr);
-          this.logger.fatal("Error while executing the Git command.");
+          this.logger.fatal(
+            `Error while executing the \`${GIT_DIFF_COMMAND}\` command.`
+          );
           reject(error);
         }
 

@@ -77,7 +77,7 @@ export function parseChunk(
 
   let currentPosition = startLinePosition;
 
-  for (const rawLine of chunk.split("\n")) {
+  for (const rawLine of chunk.split("\n").filter(Boolean)) {
     const prefix = rawLine[0];
     const content = rawLine.slice(1);
 
@@ -110,8 +110,6 @@ export function parseChunk(
 /**
  * Parses the output of the `git diff` command.
  *
- * @todo add unit tests.
- *
  * @param input the stdout of the `git diff` command.
  * @returns The parsed `DiffMap`.
  */
@@ -128,8 +126,9 @@ export function parseDiffs(input: string): DiffMap {
     for (const chunkWithHeader of chunksWithHeader) {
       const header = chunkWithHeader.match(CHUNK_HEADER_MATCH_REGEX)?.[0]!;
 
-      const linePosition =
-        parseInt(header.split("+")[1]!.split(COMMA_OR_SPACE_REGEX)[0]!) - 1;
+      const linePosition = parseInt(
+        header.split("+")[1]!.split(COMMA_OR_SPACE_REGEX)[0]!
+      );
       if (isNaN(linePosition)) throw "Invalid line position";
 
       const chunk = chunkWithHeader.replace(CHUNK_HEADER_REMOVAL_REGEX, "");
