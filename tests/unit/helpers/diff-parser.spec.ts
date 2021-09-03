@@ -1,7 +1,11 @@
-import { compareLine, parseChunk } from "@/helpers/diff-parser";
-import { INVALID_CHUNK, VALID_CHUNK } from "@tests/mocks/chunks";
+import { compareLine, parseChunk, parseDiffs } from "@/helpers/diff-parser";
+import {
+  INVALID_CHUNK,
+  VALID_CHUNK,
+  GIT_DIFF_STDOUT,
+} from "@tests/mocks/git-diff-outputs";
 
-describe("GitParser", () => {
+describe("Git parsing utils", () => {
   describe("compareLine", () => {
     test("Equal lines", () => {
       const deleted = "const fn = () => console.log('FOO');";
@@ -87,6 +91,31 @@ describe("GitParser", () => {
       expect(() => {
         parseChunk(INVALID_CHUNK, 12);
       }).toThrow('Unexpected chunk prefix = "');
+    });
+  });
+
+  describe("parseDiffs", () => {
+    test("Should parse the `git diff` command correctly", () => {
+      const parsed = parseDiffs(GIT_DIFF_STDOUT);
+
+      const file1 = parsed.get("src/git-checker.ts");
+      expect(file1).not.toBe(undefined);
+      const file2 = parsed.get("tests/unit/helpers/diff-parser.spec.ts");
+      expect(file2).not.toBe(undefined);
+      expect([...parsed.entries()].length).toBe(2);
+
+      const file1Line74 = file1?.get(74);
+      expect(file1Line74).toStrictEqual([29, 89]);
+
+      const file2Line4 = file2?.get(4);
+      expect(file2Line4).toStrictEqual([14, 28]);
+      const file2Lines92to95 = [92, 93, 94, 95].map((p) => file2?.get(p));
+      expect(file2Lines92to95).toStrictEqual([
+        [1, 3],
+        [1, 33],
+        undefined,
+        [1, 6],
+      ]);
     });
   });
 });
