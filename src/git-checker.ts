@@ -1,4 +1,4 @@
-import { Checker, CheckResult, CheckStatus } from "@stryker-mutator/api/check";
+import { Checker, CheckResult } from "@stryker-mutator/api/check";
 import {
   tokens,
   commonTokens,
@@ -10,6 +10,7 @@ import { Logger, LoggerFactoryMethod } from "@stryker-mutator/api/logging";
 import { Mutant } from "@stryker-mutator/api/core";
 import { DiffMap, parseDiffs } from "./helpers/diff-parser";
 import { exec } from "child_process";
+import { checkDiff } from "./helpers/diff-checker";
 
 const GIT_DIFF_COMMAND = "git diff --color=never";
 
@@ -50,7 +51,7 @@ create.inject = tokens(commonTokens.injector);
 /**
  * Git Checker plugin class.
  *
- * @todo add integration tests.
+ * @todo add integration tests when they become viable.
  */
 export class GitChecker implements Checker {
   public static inject = tokens(commonTokens.logger, commonTokens.options);
@@ -64,7 +65,7 @@ export class GitChecker implements Checker {
    *
    * @returns Void Promise.
    */
-  public async init(): Promise<void> {
+  public init = async (): Promise<void> => {
     this.logger.info("Starting the Git Checker plugin.");
 
     return new Promise((resolve, reject) => {
@@ -82,7 +83,7 @@ export class GitChecker implements Checker {
         resolve();
       });
     });
-  }
+  };
 
   /**
    * Checks if the mutant location has overlap with the Git diffs.
@@ -90,31 +91,7 @@ export class GitChecker implements Checker {
    * @param mutant The mutant to be checked.
    * @returns The Check Result.
    */
-  public async check({ fileName, location }: Mutant): Promise<CheckResult> {
-    const diff = this.diffMap!.get(fileName);
-
-    if (diff) {
-      for (const [lineNumber, range] of diff.entries()) {
-        if (
-          // Start
-          (lineNumber === location.start.line &&
-            range[0] >= location.start.column) ||
-          // Middle
-          (lineNumber > location.start.line &&
-            lineNumber < location.end.line) ||
-          // Bottom
-          (lineNumber === location.end.line && range[1] < location.end.column)
-        ) {
-          return { status: CheckStatus.Passed };
-        }
-      }
-    }
-
-    // This cast is necessary because the status `Ignored` is missing
-    // in `@stryker-mutator/api` `CheckStatus` enum.
-    return {
-      status: "Ignored" as CheckStatus,
-      reason: "Mutation out of range",
-    };
-  }
+  public check = ({ fileName, location }: Mutant): Promise<CheckResult> => {
+    return Promise.resolve(checkDiff(location, this.diffMap!.get(fileName)));
+  };
 }
