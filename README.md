@@ -21,9 +21,9 @@ Future work:
 - [ ] Add mutation testing;
 - [ ] Configure CI/CD;
 - [ ] Options to set branches and commits to be compared;
-- [ ] Make it work in a simple Typescript project;
-- [ ] Make it work in a complex Typescript + React project;
-- [ ] Make it work in Windows 😬;
+- [x] Make it work on a simple Typescript project;
+- [ ] Make it work on a complex Typescript + React project;
+- [ ] Make it work on Windows 😬;
 
 🚧 `Please note`: This is quite experimental yet, things can not work as expected.
 
@@ -57,6 +57,32 @@ module.exports = {
   checkers: ["git-checker"],
   // Add all plugins being used including the `stryker-git-checker`.
   plugins: ["@stryker-mutator/jest-runner", "stryker-git-checker"],
+};
+```
+
+Using Typescript:
+
+```js
+/**
+ * Example of `stryker.conf.js` file.
+ *
+ * @type {import('@stryker-mutator/api/core').StrykerOptions}
+ */
+module.exports = {
+  packageManager: "yarn",
+  reporters: ["html", "clear-text", "progress"],
+  testRunner: "jest",
+  coverageAnalysis: "perTest",
+  // Add `git-checker` to the `checkers` list.
+  checkers: ["typescript", "git-checker"],
+  tsconfigFile: "tsconfig.json",
+  mutate: ["src/**/*.ts"],
+  // Add all plugins being used including the `stryker-git-checker`.
+  plugins: [
+    "@stryker-mutator/jest-runner",
+    "@stryker-mutator/typescript-checker",
+    "stryker-git-checker",
+  ],
 };
 ```
 
