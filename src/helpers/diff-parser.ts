@@ -121,6 +121,10 @@ export function parseDiffs(input: string, projectRootPath: string): DiffMap {
   const diffs = input.split(DIFFS_SPLIT_REGEX).filter(Boolean);
 
   for (const diff of diffs) {
+    if (diff.startsWith("deleted file")) {
+      continue;
+    }
+
     const filePath = join(
       projectRootPath,
       diff.match(FILE_PATH_REGEX)?.[0].slice(6)!

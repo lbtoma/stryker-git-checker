@@ -3,6 +3,7 @@ import {
   INVALID_CHUNK,
   VALID_CHUNK,
   GIT_DIFF_STDOUT,
+  DELETED_FILE_DIFF,
 } from "@tests/mocks/git-diff-outputs";
 import { join } from "path";
 
@@ -120,6 +121,13 @@ describe("Git parsing utils", () => {
         undefined,
         [1, 6],
       ]);
+    });
+
+    test("Should ignore deleted files", () => {
+      const projectRoot = "/home/user/project";
+      const parsed = parseDiffs(DELETED_FILE_DIFF, projectRoot);
+
+      expect([...parsed.entries()].length).toBe(0);
     });
   });
 });
