@@ -20,15 +20,17 @@ Future work:
 - [ ] Add automated integration tests (I'm still figuring out how I will do this);
 - [ ] Add mutation testing;
 - [ ] Configure CI/CD;
+- [ ] Options to set branches and commits to be compared;
 - [ ] Make it work in a simple Typescript project;
 - [ ] Make it work in a complex Typescript + React project;
 - [ ] Make it work in Windows 😬;
 
-🚧 `Please note`: This is very experimental yet, thinks can not work as expected.
+🚧 `Please note`: This is quite experimental yet, things can not work as expected.
 
 ## Usage
 
-To install the plugin to a existing project with Stryker Mutator, just add the plugin package with `npm` or `yarn`:
+To install the plugin to an existing project with Stryker Mutator,
+just add the plugin package with `npm` or `yarn`:
 
 ```bash
 # NPM
