@@ -1,3 +1,5 @@
+import { join } from "path";
+
 export enum ChunkLinePrefix {
   UNCHANGED = " ",
   ADDITION = "+",
@@ -111,14 +113,18 @@ export function parseChunk(
  * Parses the output of the `git diff` command.
  *
  * @param input the stdout of the `git diff` command.
+ * @param projectRootPath the root path of the project.
  * @returns The parsed `DiffMap`.
  */
-export function parseDiffs(input: string): DiffMap {
+export function parseDiffs(input: string, projectRootPath: string): DiffMap {
   const diffMap: DiffMap = new Map();
   const diffs = input.split(DIFFS_SPLIT_REGEX).filter(Boolean);
 
   for (const diff of diffs) {
-    const filePath = diff.match(FILE_PATH_REGEX)?.[0].slice(6)!;
+    const filePath = join(
+      projectRootPath,
+      diff.match(FILE_PATH_REGEX)?.[0].slice(6)!
+    );
     const rangeEntries: [number, LineDifferenceRange][] = [];
 
     const chunksWithHeader = diff.match(CHUNKS_MATCH_REGEX)!;

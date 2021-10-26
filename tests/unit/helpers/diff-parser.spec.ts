@@ -4,6 +4,7 @@ import {
   VALID_CHUNK,
   GIT_DIFF_STDOUT,
 } from "@tests/mocks/git-diff-outputs";
+import { join } from "path";
 
 describe("Git parsing utils", () => {
   describe("compareLine", () => {
@@ -96,11 +97,14 @@ describe("Git parsing utils", () => {
 
   describe("parseDiffs", () => {
     test("Should parse the `git diff` command correctly", () => {
-      const parsed = parseDiffs(GIT_DIFF_STDOUT);
+      const projectRoot = "/home/user/project";
+      const parsed = parseDiffs(GIT_DIFF_STDOUT, projectRoot);
 
-      const file1 = parsed.get("src/git-checker.ts");
+      const file1 = parsed.get(join(projectRoot, "src/git-checker.ts"));
       expect(file1).not.toBe(undefined);
-      const file2 = parsed.get("tests/unit/helpers/diff-parser.spec.ts");
+      const file2 = parsed.get(
+        join(projectRoot, "tests/unit/helpers/diff-parser.spec.ts")
+      );
       expect(file2).not.toBe(undefined);
       expect([...parsed.entries()].length).toBe(2);
 
