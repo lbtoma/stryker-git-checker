@@ -12,7 +12,7 @@ import { DiffMap, parseDiffs } from "./helpers/diff-parser";
 import { exec } from "child_process";
 import { checkDiff } from "./helpers/diff-checker";
 
-const GIT_DIFF_COMMAND = "git diff --color=never";
+const GIT_DIFF_COMMAND = "git diff --color=never HEAD^";
 
 function gitCheckerLoggerFactory(
   loggerFactory: LoggerFactoryMethod,
@@ -66,21 +66,39 @@ export class GitChecker implements Checker {
    * @returns Void Promise.
    */
   public init = async (): Promise<void> => {
-    this.logger.info("Starting the Git Checker plugin.");
+    this.logger.debug("Process starting Git Checker plugin.");
 
     return new Promise((resolve, reject) => {
       exec(GIT_DIFF_COMMAND, (error, stdout, stderr) => {
-        if (error) {
-          this.logger.error(stderr);
-          this.logger.fatal(
-            `Error while executing the \`${GIT_DIFF_COMMAND}\` command.`
-          );
-          reject(error);
-        }
+        try {
+          if (error) {
+            this.logger.error(stderr);
+            this.logger.fatal(
+              `Error while executing the \`${GIT_DIFF_COMMAND}\` command.`
+            );
+            reject(error);
+          }
 
-        this.diffMap = parseDiffs(stdout);
-        this.logger.info("Git Checker plugin successfully loaded.");
-        resolve();
+          this.logger.trace("Git diff command output:", stdout);
+
+          this.diffMap = parseDiffs(stdout, process.cwd());
+
+          this.logger.debug("Process successfully loaded Git Checker plugin.");
+
+          if (this.logger.isTraceEnabled()) {
+            for (const [file, diffs] of this.diffMap) {
+              for (const [line, [start, end]] of diffs) {
+                this.logger.trace(
+                  `File "${file}": changes detected in the line ${line}, column ${start} to ${end}.`
+                );
+              }
+            }
+          }
+
+          resolve();
+        } catch (err) {
+          reject(err);
+        }
       });
     });
   };
@@ -92,6 +110,11 @@ export class GitChecker implements Checker {
    * @returns The Check Result.
    */
   public check = ({ fileName, location }: Mutant): Promise<CheckResult> => {
+    this.logger.trace(
+      `Checking a mutant in the file "${fileName}, location:`,
+      location
+    );
+
     return Promise.resolve(checkDiff(location, this.diffMap!.get(fileName)));
   };
 }
