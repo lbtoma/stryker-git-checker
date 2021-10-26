@@ -1,6 +1,6 @@
 {
   "name": "stryker-git-checker",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Git Checker for Stryker Mutator Javascript testing framework",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -15,7 +15,8 @@
     "build": "tsc -p tsconfig-build.json",
     "test:unit": "jest",
     "lint:fix": "yarn prettier --end-of-line=lf --ignore-path .gitignore --write -c .",
-    "lint:check": "yarn prettier --end-of-line=lf --ignore-path .gitignore -c ."
+    "lint:check": "yarn prettier --end-of-line=lf --ignore-path .gitignore -c .",
+    "release": "rm -fr dist/ && yarn build && yarn publish"
   },
   "dependencies": {
     "@stryker-mutator/api": "^5.3.0",
