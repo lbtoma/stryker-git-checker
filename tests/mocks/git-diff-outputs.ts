@@ -57,3 +57,21 @@ index d717279..2370206 100644
 +
 +  });
  });`;
+
+export const DELETED_FILE_DIFF = `diff --git a/src/index.js b/src/index.js
+deleted file mode 100644
+index 1464b96..0000000
+--- a/src/index.js
++++ /dev/null
+@@ -1,11 +0,0 @@
+-const fibonacci = n => {
+-  if (n <= 0) {
+-    return 0;
+-  } else if (n === 1) {
+-    return 1;
+-  } else {
+-    return fibonacci(n - 1) + fibonacci(n - 2);
+-  }
+-};
+-
+-module.exports.fibonacci = fibonacci;`;

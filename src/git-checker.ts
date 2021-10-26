@@ -81,7 +81,11 @@ export class GitChecker implements Checker {
 
           this.logger.trace("Git diff command output:", stdout);
 
-          this.diffMap = parseDiffs(stdout, process.cwd());
+          const projectRoot = process.cwd();
+
+          this.logger.trace("Project root path:", projectRoot);
+
+          this.diffMap = parseDiffs(stdout, projectRoot);
 
           this.logger.debug("Process successfully loaded Git Checker plugin.");
 
