@@ -31,8 +31,8 @@
     "build": "tsc -p tsconfig-build.json",
     "build:clean": "rm -rf dist/ tsconfig-build.tsbuildinfo && yarn build",
     "test:unit": "jest",
-    "lint:fix": "yarn prettier --end-of-line=lf --ignore-path .gitignore --write -c .",
-    "lint:check": "yarn prettier --end-of-line=lf --ignore-path .gitignore -c .",
+    "lint:fix": "yarn lint:check --write",
+    "lint:check": "yarn prettier --check .",
     "release": "yarn build:clean && yarn publish"
   },
   "dependencies": {
